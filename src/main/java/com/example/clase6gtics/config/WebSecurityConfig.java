@@ -25,7 +25,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().loginPage("/loginForm").loginProcessingUrl("/processLogin").usernameParameter("correo")
                 .defaultSuccessUrl("/redirectByRole",true);
 
-        http.logout().logoutSuccessUrl("/product");
+        http.logout()
+                .logoutSuccessUrl("/product")
+                .deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true);
     }
 
     @Autowired
@@ -40,7 +43,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usersByUsernameQuery("SELECT email, pwd, activo FROM usuario WHERE email = ?")
                 .authoritiesByUsernameQuery("SELECT u.email, r.nombre FROM usuario u INNER JOIN " +
                         "rol r ON (u.idrol = r.idrol) WHERE u.email = ? and u.activo = 1");
-
 
     }
 }
